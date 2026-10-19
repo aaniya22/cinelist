@@ -7,8 +7,7 @@ import MovieCard from './components/MovieCard'
 import WatchlistItem from './components/WatchlistItem'
 import MovieModal from './components/MovieModal'
 
-const TMDB_BASE = 'https://api.themoviedb.org/3'
-const API_KEY = import.meta.env.VITE_TMDB_KEY
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 export default function App() {
   const [query, setQuery] = useState('')
@@ -52,12 +51,9 @@ export default function App() {
     setLoading(true)
     setError('')
     try {
-      const endpoint =
-        type === 'multi'
-          ? `/search/multi?query=${encodeURIComponent(q)}&include_adult=false`
-          : `/search/${type}?query=${encodeURIComponent(q)}`
-
-      const res = await fetch(`${TMDB_BASE}${endpoint}&api_key=${API_KEY}`)
+      const res = await fetch(
+        `${API_BASE}/api/search?query=${encodeURIComponent(q)}&type=${type}`
+      )
       if (!res.ok) throw new Error('API error ' + res.status)
 
       const data = await res.json()
@@ -66,7 +62,7 @@ export default function App() {
       )
       setResults(filtered.slice(0, 20))
     } catch (e) {
-      setError('Could not fetch results. Check your VITE_TMDB_KEY in .env')
+      setError('Could not fetch results. Is the server running?')
       setResults([])
     }
     setLoading(false)
