@@ -5,7 +5,7 @@
   --panel: #101012;
   --accent: #ff4d00;
   --display: 'Inter Tight', system-ui, sans-serif;
-  --mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mono-font: 'Inter Tight', system-ui, sans-serif;
 
   position: relative;
   min-height: 100vh;
