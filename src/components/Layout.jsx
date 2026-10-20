@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavLink, Link, Outlet, useLocation } from 'react-router-dom'
+import { NavLink, Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useApp } from '../context/AppContext'
 
@@ -13,6 +13,7 @@ const LINKS = [
 
 export default function Layout() {
   const location = useLocation()
+  const navigate = useNavigate()
   const { logout } = useApp()
   const [menu, setMenu] = useState(false)
 
@@ -66,6 +67,7 @@ export default function Layout() {
                   onClick={() => {
                     setMenu(false)
                     logout()
+                    navigate('/login')
                   }}
                 >
                   Log out
