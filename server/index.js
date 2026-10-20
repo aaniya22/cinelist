@@ -36,6 +36,34 @@ app.get('/api/search', async (req, res) => {
   }
 })
 
+const DISCOVER = {
+  popular: '/trending/all/week',
+  latest: '/movie/now_playing',
+  top_rated: '/movie/top_rated',
+  recommended: '/tv/popular',
+}
+
+app.get('/api/discover', async (req, res) => {
+  const { tab = 'popular' } = req.query
+  const path = DISCOVER[tab]
+  if (!path) return res.status(400).json({ error: 'Invalid tab' })
+
+  try {
+    const r = await fetch(`${TMDB_BASE}${path}?api_key=${process.env.TMDB_KEY}`)
+    if (!r.ok) return res.status(502).json({ error: 'TMDB error ' + r.status })
+    const data = await r.json()
+    const fallback = path.startsWith('/tv') ? 'tv' : 'movie'
+    const results = (data.results || [])
+      .filter((x) => x.poster_path)
+      .map((x) => ({ ...x, media_type: x.media_type || fallback }))
+      .slice(0, 20)
+    res.json({ results })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ error: 'Server error' })
+  }
+})
+
 const signToken = (user) =>
   jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
 

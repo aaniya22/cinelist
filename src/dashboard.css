@@ -1,0 +1,308 @@
+.shell .dash {
+  text-align: center;
+  overflow-x: clip;
+}
+
+.shell .dash-kicker {
+  text-align: center;
+}
+
+.shell .dash-title {
+  margin: 0 auto 28px;
+  max-width: 1100px;
+  font-size: clamp(32px, 4.5vw, 64px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+/* ---------- tabs ---------- */
+.shell .dash-tabs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.shell .dash-tab {
+  padding: 9px 18px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--mono-font);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.shell .dash-tab:hover {
+  color: var(--ink);
+}
+
+.shell .dash-tab.active {
+  background: var(--ink);
+  color: #fff;
+}
+
+/* ---------- fanned cards ---------- */
+.shell .dash-stage {
+  --cw: 240px;
+  position: relative;
+  height: 520px;
+  margin-top: 16px;
+}
+
+.shell .dash-card {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  width: var(--cw);
+  margin-left: calc(var(--cw) / -2);
+  aspect-ratio: 2 / 3;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #d8d8dc;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  user-select: none;
+}
+
+.shell .dash-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) brightness(1.05);
+  transition: filter 0.4s;
+}
+
+.shell .dash-card.center {
+  cursor: default;
+}
+
+.shell .dash-card.center img {
+  filter: none;
+}
+
+.shell .dash-badge {
+  position: absolute;
+  top: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(14, 14, 16, 0.75);
+  color: #fff;
+  backdrop-filter: blur(4px);
+}
+
+.shell .dash-badge.rate {
+  left: 10px;
+  color: #ffd24d;
+}
+
+.shell .dash-badge.type {
+  right: 10px;
+}
+
+.shell .dash-info {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 48px 14px 16px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+  color: #fff;
+  text-align: center;
+}
+
+.shell .dash-info h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.shell .dash-info span {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.shell .dash-msg {
+  position: absolute;
+  top: 40%;
+  left: 0;
+  right: 0;
+  margin: 0;
+  color: var(--muted);
+}
+
+/* ---------- controls ---------- */
+.shell .dash-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.shell .dash-arrow {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, opacity 0.2s;
+}
+
+.shell .dash-arrow:hover:not(:disabled) {
+  background: var(--ink);
+  color: #fff;
+}
+
+.shell .dash-arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.shell .dash-add {
+  padding: 13px 22px;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  background: var(--ink);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.shell .dash-add:hover:not(:disabled) {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.shell .dash-add.done {
+  background: transparent;
+  color: var(--muted);
+  border-color: var(--line);
+  cursor: default;
+}
+
+@media (max-width: 640px) {
+  .shell .dash-stage {
+    --cw: 180px;
+    height: 400px;
+  }
+}
+
+/* ---------- scroll sections ---------- */
+.shell .sc {
+  margin-top: 120px;
+  text-align: left;
+}
+
+.shell .sc-statement {
+  max-width: 1000px;
+  margin: 0 0 64px;
+  font-size: clamp(32px, 5.5vw, 76px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.shell .sc-statement span {
+  display: inline-block;
+}
+
+.shell .sc-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 24px;
+  margin-bottom: 120px;
+  padding: 28px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.shell .sc-stat b {
+  display: block;
+  font-size: clamp(48px, 8vw, 110px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.shell .sc-stat span {
+  color: var(--muted);
+}
+
+.shell .sc-stack {
+  padding-bottom: 80px;
+}
+
+.shell .sc-card {
+  position: sticky;
+  top: calc(32px + var(--i) * 24px);
+  min-height: 300px;
+  margin-bottom: 40px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--panel);
+  color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.shell .sc-card:nth-child(even) {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.shell .sc-num {
+  color: var(--muted);
+}
+
+.shell .sc-card h3 {
+  margin: 0;
+  font-size: clamp(40px, 7vw, 96px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.shell .sc-card p {
+  max-width: 460px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.shell .sc-link {
+  margin-top: auto;
+  align-self: flex-start;
+  padding: 10px 16px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  color: inherit;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.shell .sc-card .sc-link:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
