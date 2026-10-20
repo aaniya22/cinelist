@@ -6,6 +6,7 @@ import './App.css'
 import MovieCard from './components/MovieCard'
 import WatchlistItem from './components/WatchlistItem'
 import MovieModal from './components/MovieModal'
+import AuthForm from './components/AuthForm'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
@@ -34,6 +35,31 @@ export default function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [watchlist, setWatchlist] = useState([])
+  const [token, setToken] = useState(() => localStorage.getItem('cinelist-token'))
+
+  function handleAuth(data) {
+    localStorage.setItem('cinelist-token', data.token)
+    setToken(data.token)
+  }
+
+  function logout() {
+    localStorage.removeItem('cinelist-token')
+    setToken(null)
+    setWatchlist([])
+  }
+
+  function authFetch(path, options = {}) {
+    return fetch(`${API_BASE}${path}`, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      if (res.status === 401) logout()
+      return res
+    })
+  }
   const [mediaType, setMediaType] = useState('multi')
   const [filter, setFilter] = useState('all')
   const [selectedItem, setSelectedItem] = useState(null)
@@ -45,14 +71,15 @@ export default function App() {
 
   // Load watchlist from the API on first render
   useEffect(() => {
-    fetch(`${API_BASE}/api/watchlist`)
+    if (!token) return
+    authFetch('/api/watchlist')
       .then((res) => {
         if (!res.ok) throw new Error('API error ' + res.status)
         return res.json()
       })
       .then((data) => setWatchlist(data.map(fromDb)))
       .catch(() => setError('Could not load your watchlist.'))
-  }, [])
+  }, [token])
 
   // Debounced search — waits 400ms after user stops typing
   useEffect(() => {
@@ -92,9 +119,8 @@ export default function App() {
 
   async function addToWatchlist(item) {
     try {
-      const res = await fetch(`${API_BASE}/api/watchlist`, {
+      const res = await authFetch('/api/watchlist', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           tmdbId: item.id,
           mediaType: getType(item),
@@ -116,9 +142,8 @@ export default function App() {
 
   async function updateItem(id, changes) {
     try {
-      const res = await fetch(`${API_BASE}/api/watchlist/${id}`, {
+      const res = await authFetch(`/api/watchlist/${id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(changes),
       })
       if (!res.ok) throw new Error('API error ' + res.status)
@@ -140,7 +165,7 @@ export default function App() {
 
   async function removeItem(id) {
     try {
-      const res = await fetch(`${API_BASE}/api/watchlist/${id}`, { method: 'DELETE' })
+      const res = await authFetch(`/api/watchlist/${id}`, { method: 'DELETE' })
       if (!res.ok) throw new Error('API error ' + res.status)
       setWatchlist((prev) => prev.filter((w) => w.id !== id))
     } catch (e) {
@@ -166,6 +191,8 @@ export default function App() {
       ? (ratedItems.reduce((sum, w) => sum + w.rating, 0) / ratedItems.length).toFixed(1)
       : '—'
 
+  if (!token) return <AuthForm apiBase={API_BASE} onAuth={handleAuth} />
+
   return (
     <div className="layout">
 
@@ -179,6 +206,7 @@ export default function App() {
           <span><span className="stat-val">{watchlist.length}</span> in list</span>
           <span><span className="stat-val">{watchedCount}</span> watched</span>
           <span>avg <span className="stat-val">{avgRating}</span></span>
+          <button className="tab-btn" onClick={logout}>Log out</button>
         </div>
       </header>
 

@@ -3,7 +3,11 @@ require('dns').setServers(['1.1.1.1', '8.8.8.8'])
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 const WatchlistItem = require('./models/WatchlistItem')
+const User = require('./models/User')
+const auth = require('./middleware/auth')
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -32,9 +36,45 @@ app.get('/api/search', async (req, res) => {
   }
 })
 
-app.get('/api/watchlist', async (req, res) => {
+const signToken = (user) =>
+  jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
+
+app.post('/api/auth/signup', async (req, res) => {
+  const { email, password } = req.body
+  if (typeof email !== 'string' || typeof password !== 'string' || password.length < 6) {
+    return res.status(400).json({ error: 'Email and a password of 6+ characters required' })
+  }
   try {
-    const items = await WatchlistItem.find().sort({ createdAt: -1 })
+    const hash = await bcrypt.hash(password, 10)
+    const user = await User.create({ email, password: hash })
+    res.status(201).json({ token: signToken(user), email: user.email })
+  } catch (e) {
+    if (e.code === 11000) return res.status(409).json({ error: 'Email already registered' })
+    console.error(e)
+    res.status(500).json({ error: 'Server error' })
+  }
+})
+
+app.post('/api/auth/login', async (req, res) => {
+  const { email, password } = req.body
+  if (typeof email !== 'string' || typeof password !== 'string') {
+    return res.status(400).json({ error: 'Email and password required' })
+  }
+  try {
+    const user = await User.findOne({ email: email.toLowerCase().trim() })
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ error: 'Invalid email or password' })
+    }
+    res.json({ token: signToken(user), email: user.email })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ error: 'Server error' })
+  }
+})
+
+app.get('/api/watchlist', auth, async (req, res) => {
+  try {
+    const items = await WatchlistItem.find({ user: req.userId }).sort({ createdAt: -1 })
     res.json(items)
   } catch (e) {
     console.error(e)
@@ -42,13 +82,14 @@ app.get('/api/watchlist', async (req, res) => {
   }
 })
 
-app.post('/api/watchlist', async (req, res) => {
+app.post('/api/watchlist', auth, async (req, res) => {
   const { tmdbId, mediaType, title, posterPath, releaseDate, overview, voteAverage } = req.body
   if (!tmdbId || !['movie', 'tv'].includes(mediaType) || !title) {
     return res.status(400).json({ error: 'Invalid item' })
   }
   try {
     const item = await WatchlistItem.create({
+      user: req.userId,
       tmdbId, mediaType, title, posterPath, releaseDate, overview, voteAverage,
     })
     res.status(201).json(item)
@@ -59,13 +100,13 @@ app.post('/api/watchlist', async (req, res) => {
   }
 })
 
-app.patch('/api/watchlist/:id', async (req, res) => {
+app.patch('/api/watchlist/:id', auth, async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id)) return res.status(400).json({ error: 'Invalid id' })
   const updates = {}
   if (typeof req.body.watched === 'boolean') updates.watched = req.body.watched
   if (typeof req.body.rating === 'number') updates.rating = req.body.rating
   try {
-    const item = await WatchlistItem.findByIdAndUpdate(req.params.id, updates, {
+    const item = await WatchlistItem.findOneAndUpdate({ _id: req.params.id, user: req.userId }, updates, {
       new: true,
       runValidators: true,
     })
@@ -77,10 +118,10 @@ app.patch('/api/watchlist/:id', async (req, res) => {
   }
 })
 
-app.delete('/api/watchlist/:id', async (req, res) => {
+app.delete('/api/watchlist/:id', auth, async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id)) return res.status(400).json({ error: 'Invalid id' })
   try {
-    const item = await WatchlistItem.findByIdAndDelete(req.params.id)
+    const item = await WatchlistItem.findOneAndDelete({ _id: req.params.id, user: req.userId })
     if (!item) return res.status(404).json({ error: 'Not found' })
     res.json({ ok: true })
   } catch (e) {
@@ -91,8 +132,9 @@ app.delete('/api/watchlist/:id', async (req, res) => {
 
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => {
+  .then(async () => {
     console.log('MongoDB connected')
+    await WatchlistItem.syncIndexes()
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
   })
   .catch((err) => {

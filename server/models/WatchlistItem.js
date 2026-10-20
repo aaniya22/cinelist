@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 
 const watchlistItemSchema = new mongoose.Schema(
   {
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     tmdbId: { type: Number, required: true },
     mediaType: { type: String, enum: ['movie', 'tv'], required: true },
     title: { type: String, required: true },
@@ -16,6 +17,6 @@ const watchlistItemSchema = new mongoose.Schema(
 )
 
 // a movie and a TV show can share an id, so uniqueness uses both
-watchlistItemSchema.index({ tmdbId: 1, mediaType: 1 }, { unique: true })
+watchlistItemSchema.index({ user: 1, tmdbId: 1, mediaType: 1 }, { unique: true })
 
 module.exports = mongoose.model('WatchlistItem', watchlistItemSchema)
