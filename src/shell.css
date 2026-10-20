@@ -15,7 +15,7 @@ body,
   --line: rgba(59, 47, 58, 0.14);
   --accent: #ac92a6;
   --display: 'Inter Tight', system-ui, sans-serif;
-  --mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mono-font: 'Inter Tight', system-ui, sans-serif;
 
   position: relative;
   min-height: 100vh;

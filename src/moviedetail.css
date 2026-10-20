@@ -1,0 +1,271 @@
+.shell .sp-card {
+  cursor: pointer;
+}
+
+.shell .md-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 32px 16px;
+  overflow-y: auto;
+  background: rgba(40, 30, 40, 0.6);
+  backdrop-filter: blur(6px);
+}
+
+.shell .md-panel {
+  position: relative;
+  width: min(1100px, 100%);
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--panel);
+  color: #fff;
+}
+
+.shell .md-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 5;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.25);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.shell .md-close:hover {
+  background: #fff;
+  color: var(--ink);
+}
+
+/* ---------- hero ---------- */
+.shell .md-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 32px;
+  align-items: end;
+  min-height: 540px;
+  padding: 64px 48px 40px;
+  background-color: var(--panel);
+  background-size: cover;
+  background-position: center top;
+}
+
+.shell .md-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, var(--panel) 2%, rgba(107, 86, 106, 0.4) 55%, rgba(107, 86, 106, 0.2)),
+    linear-gradient(to right, rgba(107, 86, 106, 0.9) 5%, transparent 70%);
+}
+
+.shell .md-main,
+.shell .md-side {
+  position: relative;
+  z-index: 1;
+}
+
+.shell .md-tagline {
+  margin-bottom: 10px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.shell .md-title {
+  margin: 0 0 16px;
+  font-size: clamp(36px, 6vw, 84px);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.shell .md-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.shell .md-meta span {
+  padding: 5px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+}
+
+.shell .md-overview {
+  max-width: 520px;
+  margin: 0 0 24px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.shell .md-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.shell .md-btn {
+  padding: 13px 20px;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  background: transparent;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.shell .md-btn:hover:not(:disabled),
+.shell .md-btn.primary {
+  background: #fff;
+  color: var(--ink);
+}
+
+.shell .md-btn.primary:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.shell .md-btn:disabled {
+  border-color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.6);
+  cursor: default;
+}
+
+.shell .md-side {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-left: 20px;
+  border-left: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.shell .md-side p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.shell .md-label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ---------- body ---------- */
+.shell .md-body {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 32px 48px 48px;
+}
+
+.shell .md-body h4 {
+  margin: 0 0 14px;
+}
+
+.shell .md-note {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.shell .md-prov-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.shell .md-prov-label {
+  width: 56px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.shell .md-prov-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.shell .md-prov-list img {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+}
+
+.shell .md-more {
+  display: inline-block;
+  margin-top: 6px;
+  color: #fff;
+}
+
+.shell .md-credit {
+  margin: 14px 0 0;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.shell .md-none {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.shell .md-cast {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 18px 14px;
+}
+
+.shell .md-person {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.shell .md-person img,
+.shell .md-person-empty {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 8px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.shell .md-person b {
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.shell .md-person span {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+@media (max-width: 760px) {
+  .shell .md-hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding: 72px 24px 28px;
+  }
+
+  .shell .md-side {
+    padding-left: 0;
+    padding-top: 16px;
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+  }
+
+  .shell .md-body {
+    padding: 24px;
+  }
+}

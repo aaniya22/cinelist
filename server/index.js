@@ -64,6 +64,65 @@ app.get('/api/discover', async (req, res) => {
   }
 })
 
+app.get('/api/details/:type/:id', async (req, res) => {
+  const { type, id } = req.params
+  const region = String(req.query.region || 'IN').toUpperCase().slice(0, 2)
+  if (!['movie', 'tv'].includes(type) || !/^\d+$/.test(id)) {
+    return res.status(400).json({ error: 'Invalid request' })
+  }
+
+  try {
+    const url = `${TMDB_BASE}/${type}/${id}?append_to_response=credits,videos,watch/providers&api_key=${process.env.TMDB_KEY}`
+    const r = await fetch(url)
+    if (!r.ok) return res.status(502).json({ error: 'TMDB error ' + r.status })
+    const d = await r.json()
+
+    const makers =
+      type === 'tv'
+        ? (d.created_by || []).map((p) => p.name)
+        : (d.credits?.crew || []).filter((c) => c.job === 'Director').map((c) => c.name)
+
+    const vids = (d.videos?.results || []).filter((v) => v.site === 'YouTube')
+    const trailer = vids.find((v) => v.type === 'Trailer') || vids[0]
+
+    const wp = d['watch/providers']?.results?.[region] || {}
+    const pick = (list) => (list || []).map((p) => ({ name: p.provider_name, logo: p.logo_path }))
+
+    res.json({
+      id: d.id,
+      mediaType: type,
+      title: d.title || d.name,
+      tagline: d.tagline,
+      overview: d.overview,
+      backdrop: d.backdrop_path,
+      release: d.release_date || d.first_air_date,
+      runtime: type === 'movie' ? d.runtime : d.episode_run_time?.[0] || null,
+      seasons: d.number_of_seasons,
+      episodes: d.number_of_episodes,
+      genres: (d.genres || []).map((g) => g.name),
+      rating: d.vote_average,
+      status: d.status,
+      makers,
+      cast: (d.credits?.cast || []).slice(0, 10).map((c) => ({
+        name: c.name,
+        character: c.character,
+        photo: c.profile_path,
+      })),
+      trailer: trailer ? trailer.key : null,
+      watch: {
+        region,
+        link: wp.link || null,
+        stream: pick(wp.flatrate),
+        rent: pick(wp.rent),
+        buy: pick(wp.buy),
+      },
+    })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ error: 'Server error' })
+  }
+})
+
 const signToken = (user) =>
   jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
 

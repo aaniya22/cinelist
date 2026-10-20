@@ -1,0 +1,147 @@
+.shell .sp-input {
+  display: block;
+  width: 100%;
+  margin: 28px 0 20px;
+  padding: 0 0 14px;
+  border: 0;
+  border-bottom: 2px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: clamp(24px, 4vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  outline: none;
+}
+
+.shell .sp-input::placeholder {
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+.shell .sp-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.shell .sp-type {
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.shell .sp-type:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.shell .sp-type.active {
+  background: var(--panel);
+  border-color: var(--panel);
+  color: #fff;
+}
+
+.shell .sp-msg {
+  padding: 32px 0;
+  color: var(--muted);
+}
+
+.shell .sp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 24px 18px;
+}
+
+.shell .sp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.shell .sp-poster-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.shell .sp-poster {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  background: var(--line);
+  transition: transform 0.4s;
+}
+
+.shell .sp-card:hover .sp-poster {
+  transform: scale(1.04);
+}
+
+.shell .sp-poster-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+
+.shell .sp-badge {
+  position: absolute;
+  top: 8px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: none;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.shell .sp-badge.rate {
+  left: 8px;
+  color: #ffd24d;
+}
+
+.shell .sp-badge.type {
+  right: 8px;
+}
+
+.shell .sp-title {
+  margin: 6px 0 0;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.shell .sp-year {
+  margin-bottom: 8px;
+  color: var(--muted);
+}
+
+.shell .sp-add {
+  margin-top: auto;
+  padding: 9px 12px;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.shell .sp-add:hover:not(:disabled) {
+  background: var(--panel);
+  border-color: var(--panel);
+  color: #fff;
+}
+
+.shell .sp-add.done {
+  border-color: var(--line);
+  color: var(--muted);
+  cursor: default;
+}

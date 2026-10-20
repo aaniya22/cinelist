@@ -7,6 +7,7 @@ import AuthForm from './components/AuthForm'
 import LandingPage from './components/LandingPage'
 import WatchlistPage from './components/WatchlistPage'
 import DashboardPage from './components/DashboardPage'
+import SearchPage from './components/SearchPage'
 
 function Placeholder({ num, title }) {
   return (
@@ -35,7 +36,7 @@ function Gate() {
       <Route element={<Layout />}>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/search" element={<Placeholder num="02" title="Search" />} />
+        <Route path="/search" element={<SearchPage />} />
         <Route path="/watchlist" element={<WatchlistPage />} />
         <Route path="/unwatched" element={<Placeholder num="04" title="Unwatched" />} />
         <Route path="/watched" element={<Placeholder num="05" title="Watched" />} />
