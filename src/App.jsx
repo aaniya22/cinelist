@@ -4,7 +4,7 @@ import './shell.css'
 import { AppProvider, useApp, API_BASE } from './context/AppContext'
 import Layout from './components/Layout'
 import AuthForm from './components/AuthForm'
-import LandingPage from './components/LandingPage'
+
 import WatchlistPage from './components/WatchlistPage'
 import DashboardPage from './components/DashboardPage'
 import SearchPage from './components/SearchPage'
@@ -24,9 +24,9 @@ function Gate() {
   if (!token)
     return (
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<AuthForm apiBase={API_BASE} onAuth={handleAuth} />} />
         <Route path="/login" element={<AuthForm apiBase={API_BASE} onAuth={handleAuth} />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     )
 
