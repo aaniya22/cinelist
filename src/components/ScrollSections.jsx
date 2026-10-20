@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 
 const FEATURES = [
@@ -16,6 +16,7 @@ const view = { once: true, margin: '-80px' }
 
 export default function ScrollSections() {
   const { watchlist, watchedCount } = useApp()
+  const navigate = useNavigate()
 
   const stats = [
     [watchlist.length, 'Saved'],
@@ -56,7 +57,7 @@ export default function ScrollSections() {
       </div>
 
       <div className="sc-stack">
-        {FEATURES.map(([num, title, text, to, cta], i) => (
+        {FEATURES.map(([num, title, text, to], i) => (
           <motion.article
             key={title}
             className="sc-card"
@@ -65,13 +66,14 @@ export default function ScrollSections() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.7, ease }}
+            onClick={() => navigate(to)}
+            onKeyDown={(e) => e.key === 'Enter' && navigate(to)}
+            role="link"
+            tabIndex={0}
           >
             <span className="mono sc-num">{num}</span>
             <h3>{title}</h3>
             <p>{text}</p>
-            <Link to={to} className="sc-link mono">
-              {cta} →
-            </Link>
           </motion.article>
         ))}
       </div>

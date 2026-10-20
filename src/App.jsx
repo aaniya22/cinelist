@@ -38,8 +38,8 @@ function Gate() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/watchlist" element={<WatchlistPage />} />
-        <Route path="/unwatched" element={<Placeholder num="04" title="Unwatched" />} />
-        <Route path="/watched" element={<Placeholder num="05" title="Watched" />} />
+        <Route path="/unwatched" element={<WatchlistPage lockFilter="todo" num="04" title="Unwatched" />} />
+        <Route path="/watched" element={<WatchlistPage lockFilter="done" num="05" title="Watched" />} />
         <Route path="*" element={<Placeholder num="404" title="Not found" />} />
       </Route>
     </Routes>

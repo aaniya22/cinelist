@@ -33,6 +33,7 @@ body,
 
 /* faint vertical center line + diagonals */
 .shell-grid {
+  display: none;
   position: fixed;
   inset: 0;
   pointer-events: none;
@@ -315,6 +316,10 @@ body,
   display: flex;
   color: var(--ink);
   transition: color 0.2s;
+}
+
+.shell .nav-right .nav-icon {
+  display: none;
 }
 
 .shell .nav-icon:hover {

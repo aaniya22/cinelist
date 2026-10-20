@@ -15,9 +15,10 @@ const getTitle = (i) => i.title || i.name || 'Unknown'
 const getYear = (i) => (i.release_date || i.first_air_date || '').slice(0, 4) || '—'
 const getKind = (i) => (i.media_type === 'tv' ? 'TV' : 'FILM')
 
-export default function WatchlistPage() {
+export default function WatchlistPage({ lockFilter, num = '03', title = 'Watchlist' }) {
   const { watchlist, watchedCount, toggleWatched, rateItem, removeItem, error } = useApp()
-  const [filter, setFilter] = useState('all')
+  const [pickedFilter, setFilter] = useState('all')
+  const filter = lockFilter || pickedFilter
 
   const counts = {
     all: watchlist.length,
@@ -31,10 +32,9 @@ export default function WatchlistPage() {
 
   return (
     <div>
-      <div className="mono page-kicker">03 / Watchlist</div>
-      <h1 className="page-title">Watchlist</h1>
+      <h1 className="page-title">{title}</h1>
 
-      <div className="wp-filters">
+      <div className="wp-filters" style={lockFilter ? { display: 'none' } : undefined}>
         {FILTERS.map(([num, label, key]) => (
           <button
             key={key}

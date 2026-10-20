@@ -263,6 +263,15 @@
   box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.15);
 }
 
+.shell .sc-card {
+  cursor: pointer;
+}
+
+.shell .sc-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
 .shell .sc-card:nth-child(even) {
   background: #fff;
   color: var(--ink);
@@ -271,6 +280,14 @@
 
 .shell .sc-num {
   color: var(--muted);
+}
+
+.shell .sc-card:nth-child(odd) .sc-num {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.shell .sc-card:nth-child(odd) p {
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .shell .sc-card h3 {
